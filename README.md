@@ -1,0 +1,144 @@
+# reggie_take_out 瑞吉外卖完整代码以及相对应的笔记
+
+# 1、项目中使用到的大多数注解的作用
+# @SpringBootApplication注解：
+是Spring Boot中的一个注解，它的作用是标识一个主程序类。在Spring Boot应用中，我们需要编写一个Java类作为主程序入口，该类需要包含main方法，并且需要被@SpringBootApplication注解所标识。@SpringBootApplication注解实际上是一个组合注解，它包含了多个注解，包括@SpringBootConfiguration、@EnableAutoConfiguration和@ComponentScan。其中，@SpringBootConfiguration注解表示该类为Spring Boot的配置类，它与传统的@Configuration注解作用相同，用于定义应用的配置信息。@EnableAutoConfiguration注解表示开启自动配置，它会根据classpath下的jar包、类路径、注解等信息，自动配置Bean。@ComponentScan注解表示扫描组件，它会自动扫描当前主程序类所在的包及其子包下的所有组件。总之，@SpringBootApplication注解是Spring Boot应用的入口标识，它包含了多个注解，用于定义应用的配置信息、启用自动配置和扫描组件等。使用该注解能够简化Spring Boot应用的配置和启动过程，提高开发效率。
+
+# @RestController注解：
+是用于标识Spring MVC项目中控制器类的注解，它是@Controller和@ResponseBody注解的组合，表示该类的所有方法都返回JSON格式的数据。
+
+# @RequestMapping注解：
+是Spring MVC框架中的一个注解，它的作用是将一个URL映射到一个Controller的处理方法上。该注解可以用于Controller类和Controller方法上。当我们在Controller类上使用@RequestMapping注解时，它会将该类下所有的方法都映射到同一个URL上。而当我们在Controller方法上使用@RequestMapping注解时，它会将该方法映射到指定的URL上。@RequestMapping注解还可以设置请求方式、请求参数、请求头等条件，以更精确地匹配请求。通过使用@RequestParam注解，还可以接收和处理请求参数。总之，@RequestMapping注解是Spring MVC框架中非常重要的一个注解，它可以帮助我们实现URL与Controller方法的映射，从而实现请求的处理。
+
+# @ServletComponentScan注解：
+是Spring Boot的一个注解，它用于启用扫描和注册Servlet、Filter和Listener组件。在传统的Web应用程序中，我们需要在web.xml文件中手动配置这些组件；但Spring Boot采用了基于Java类的配置方式，这意味着我们可以在一个普通的Java类上添加特定注解进行配置。通常情况下，我们会将Servlet、Filter和Listener类打上@WebServlet、@WebFilter和@WebListener注解，然后使用@ServletComponentScan注解来开启基于注解的组件扫描功能，确保这些组件能够被正确地识别、加载和使用。当然，如果你已经手动将这些组件注册到Spring上下文中，则不需要使用@ServletComponentScan注解。这一切取决于你的具体需求和实际情况。
+
+# @EnableTransactionManagement注解：
+是Spring框架中的一个注解，它的作用是开启事务管理功能。在Spring应用中，我们经常需要对数据库进行操作，而数据库操作往往需要使用事务来保证数据的一致性和完整性。@EnableTransactionManagement注解可以在Spring应用中启用事务管理功能，它会自动为带有@Transactional注解的方法创建事务，使得这些方法在执行时可以自动运行在事务中。具体来说，@EnableTransactionManagement注解会给Spring容器中注册一个名为transactionManager的Bean，该Bean实现了PlatformTransactionManager接口，用于管理事务的生命周期。同时，它还会为@Transaction注解提供支持，使得我们在方法上使用@Transaction注解时，能够自动创建并管理事务。需要注意的是，要使用@EnableTransactionManagement注解，我们还需要在Spring配置文件中配置事务管理器的具体实现，例如使用JDBC事务管理器或者Hibernate事务管理器等。总之，@EnableTransactionManagement注解是Spring框架中非常重要的一个注解，它可以开启事务管理功能，使得我们能够方便地管理事务，保证数据的一致性和完整性。
+
+# @EnableCaching注解：
+是Spring框架提供的一个注解，用来启用声明式缓存管理特性。当我们为一个方法添加缓存后，该方法的结果将被缓存起来，当下次调用该方法时，如果输入参数相同，则可以直接从缓存中获取结果，而无需再次执行该方法。使用@EnableCaching注解，我们可以在应用程序中轻松地开启缓存功能。它会自动检测标记了@Cacheable、@CachePut或@CacheEvict注解的方法，并为其创建一个缓存代理对象。这样做可以帮助我们有效地提高系统性能和吞吐量，减少对后端数据源的访问压力，并显著降低应用程序响应时间和延迟。需要注意的是，在使用@EnableCaching注解前，我们还需要将缓存管理器的实现类添加到应用程序上下文中，以便Spring能够正确地识别和使用它。同时，我们也需要在相关方法上添加@Cacheable、@CachePut或@CacheEvict注解，来控制缓存的具体行为和规则。总的来说，@EnableCaching是一个非常方便和实用的注解，它可以帮助我们更好地管理和使用应用程序的缓存功能，提高系统效率和性能。
+
+# @RestController注解：
+是用于标识Spring MVC项目中控制器类的注解，它是@Controller和@ResponseBody注解的组合，表示该类的所有方法都返回JSON格式的数据。
+
+# @Service注解：
+是 Spring Framework 中的一种注解，它标识了这个类是一个业务逻辑层的服务 Bean。这意味着当 Spring 应用启动时，该 Bean 会被自动创建并加入到 Spring 应用上下文中。简而言之，@Service 注解是一种用于标记服务层 Bean 的注解，是在 Spring Boot 应用中实现业务逻辑复用的重要方法之一。
+
+# @Mapper注解：
+这个注解一般使用在Dao层接口上，相当于一个mapper.xml文件，它的作用就是将接口生成一个动态代理类。加入了@Mapper注解，目的就是为了不再写mapper映射文件。这个注解就是用来映射mapper.xml文件的。使用@mapper后，不需要在spring配置中设置扫描地址，通过mapper.xml里面的namespace属性对应相关的mapper类，spring将动态的生成Bean后注入到ServiceImpl中
+ 
+# @Transactional注解：
+是Spring框架中的一个注解，用于控制事务的提交、回滚和隔离级别等属性。在对数据库进行增删改查等操作时，我们往往需要保证这些操作是原子性的，即要么全部成功执行，要么全部执行失败并回滚。使用@Transactional注解可以轻松实现这一目标，它会告诉Spring在方法执行期间开启一个事务，并将其中所有的数据操作绑定到该事务中。当方法执行结束后，Spring会检查事务的状态，并根据情况决定是提交还是回滚事务。通过@Transactional注解，我们可以方便地控制整个方法作为一个事务来执行，而不用手动编写复杂的事务管理代码。同时，该注解还支持设置隔离级别、超时时间、传播行为等属性，以允许更精细的事务控制和配置。需要注意的是，@Transactional注解只能应用于public方法，否则将被忽略。此外，如果在同一个类中调用了另一个添加了@Transactional注解的方法，则事务只会对外层方法产生影响。总的来说，@Transactional注解是Spring框架中非常强大和实用的事务管理工具，可以帮助我们方便地控制数据库事务的增删改查等操作，提高程序的可靠性和稳定性。
+
+# @Slf4j注解：
+是一种Lombok提供的注解，用于自动化生成日志对象，简化了Logger的定义过程。在使用@Slf4j注解后，我们可以直接通过log这个变量名来创建一个Logger对象，而无需自己手动编写实例化代码。更具体地说，@Slf4j会在被注解的类中生成一个静态final的日志记录器，如private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(XXX.class);。然后我们就可以使用log对象来输出日志信息，比如log.info("message")，log.error("error message")等语句。除了@Slf4j之外，还有常见的其他日志框架，如Java自带的java.util.logging、Apache Log4j、Logback等。与这些框架相比，@Slf4j能够自动地为我们生成Logger对象，省去了手动实例化的操作。同时，它支持多个不同的日志框架实现，因此可以很方便地适应不同的项目和需求。需要注意的是，在使用@Slf4j之前，我们需要先引入Lombok的依赖包，并确保IDEA或Eclipse等开发工具已安装Lombok插件。否则，在使用@Slf4j时，IDEA可能会对日志对象显示为“Cannot resolve symbol 'log'”等错误提示。总的来说，@Slf4j是一种非常便捷和实用的注解，可以大大简化我们在Java项目中使用日志框架的代码，提高开发效率和质量。
+
+# @Autowired注解：
+是Spring框架的一种依赖注入注解，用于自动化装配被声明为Bean的组件、服务或属性。通过@Autowired注解，我们可以让Spring容器在应用上下文中查找匹配的Bean，并将其注入到需要使用它的地方，如成员变量、构造函数、方法参数等。具体来说，@Autowired注解可以实现以下几个作用：
+1.自动按类型装配：当一个Bean需要另一个Bean协助完成某些操作时，Spring容器会自动检查其容器中是否存在与之对应的其他Bean，并进行自动联接和注入。
+2.自动按名称装配：如果有多个Bean属于同一类型，且没有指定所需的Bean名称，则Spring容器将默认按照Bean的名称进行注入。
+3.支持构造函数注入：@Autowired还支持利用构造函数进行注入，使得对象创建时就完成了全部成员变量的注入工作，避免了未初始化而导致的空指针问题。
+需要注意的是，@Autowired注解只能用于Bean范围内，也就是要求被注入对象和注入源都必须在Spring容器管理范围内才能成功注入。此外，@Autowired默认情况下是必须要找到匹配的Bean才能进行注入。如果找不到指定类型的Bean或者有多个同类型的Bean存在时，注入失败会抛出异常。但我们也可以通过设置它的required属性为false来避免强制注入，即使找不到Bean也不会报错。总的来说，@Autowired注解是Spring框架中实现自动化装配和依赖注入的重要工具之一，可以大大简化Java开发者在使用复杂组件时的代码编写量，提高开发效率和可维护性。
+
+# @WebFilter注解：
+是Java Servlet 3.0规范中新增的一种过滤器注解，用于在Web应用程序中定义并配置过滤器。通过@WebFilter注解，我们可以简单地在类上直接声明一个过滤器，并指定它要拦截哪些URL或Servlet请求。具体来说，@WebFilter注解可以实现以下几个作用：
+1.过滤器控制：通过@WebFilter注解，我们可以编写自定义的过滤器代码，来对用户访问站点时发起的HTTP请求进行拦截，并进行相应的操作，如打印日志、检查用户会话状态、设置响应头部信息等等。
+2.请求安全性：@WebFilter注解还可以用来确保Web 应用程序接收到的所有请求都已按照指定的配置进行验证和处理，加强了Web应用程序的安全性。
+3.排除URL From Filter：@WebFilter注解也可以用来排除某些URL或者Servlet请求不被过滤器处理。这种排除方式可以使用注解@WebFilter的urlPatterns属性或者servletNames属性指定，简化了通过xml配置文件进行排除的复杂程度。
+需要注意的是，@WebFilter注解只能用于过滤器组件，不能用于Servlet或其他类型的组件，从而让过滤器和Servlet具体实现分离出来，在架构设计上面提高了灵活度。总的来说，@WebFilter注解是一种非常方便的过滤器配置方式，它为开发人员提供了更简单、更灵活的方式来管理Web应用的请求，并且可以对多个资源进行复合规则的控制和过滤。
+
+# @Data注解：
+是Lombok库提供的一种注解，作用是为Java类自动生成基本的getter、setter、equals、hashCode和toString等常用方法。通过使用@Data注解，我们可以避免写大量重复性的代码，从而集中精力设计更高级的业务流程。具体来说，@Data注解可以实现以下几个作用：
+1.自动生成getter/setter方法：通过@Data注解，我们不需要手动编写字段的getter和setter方法，这些方法会在编译时自动生成。这大大简化了类的编写过程，并提高了代码的可读性和可维护性。
+2.自动生成equals和hashCode方法：由于Java语言默认情况下使用“引用相等（==）”进行对象比较，这通常并不符合我们对逻辑相等定义。在应用程序中经常需要自定义equals 和 hashCode方法，以确保对象的正确比较和正常操作。通过使用@Data注解，这些方法也将自动生成，并在比较两个对象时按照指定规则比较。
+3.自动生成toString方法：@Data注解还会生成一个带有所有字段的toString()方法，方便快速查看对象的内容和状态。如此创建字符串拼接的代码重复性也得到减少。
+需要注意的是，@Data注解生成的代码可能无法满足一些特殊要求或较为复杂的场景。但是，它仍然是一个非常实用的工具，可以帮助Java开发人员在快速迭代、功能测试和实现时，将精力更多地集中于业务逻辑的编写。总的来说，@Data注解为Java开发人员提供了一个简洁、高效的方式来生成JavaBean对象的基本方法，减少了代码量而又不失灵活性，对于提高开发效率和代码可读性具有很大的意义。
+
+# @CacheEvict注解：
+是Spring框架提供的一种缓存注解，用于表示在方法执行后强制清空缓存。具体来说，@CacheEvict注解可以实现以下几个作用：
+1.清空指定key的缓存：通过@CacheEvict注解，我们可以指定要删除的缓存中的某个或某些缓存对象，而不会影响其他缓存对象。
+2.清空所有缓存：如果我们在@CacheEvict注解上使用allEntries=true参数，则该方法将清空所有缓存对象，包括其中的所有key/value对。
+3.在方法执行之前或之后触发缓存失效：@CacheEvict注解还支持在方法执行之前（beforeInvocation=true）或之后（beforeInvocation=false）触发缓存失效。
+需要注意的是，在使用了@CacheEvict注解后，下一次访问受影响的缓存对象时，会重新从数据源查询并缓存数据。总的来说，@CacheEvict注解是一种非常适合基于切面编程的缓存管理方式，可以方便快捷地清除特定缓存对象，避免数据一致性问题的同时，也能有效降低无谓的请求数量和响应时间。
+
+# @PathVariable注解：
+是Spring MVC框架的一个注解，用于绑定URI模板变量的值到方法的参数上。在使用Spring MVC开发RESTful服务时，常常需要将URI中的参数提取出来，然后用于方法处理。这个时候我们可以使用@PathVariable注解。具体来说，@PathVariable注解可以实现以下几个作用：
+1.获取路径变量：通过在Controller层中设置@PathVariable("{变量名}")，即可在方法参数上获取指定名称的URL路径变量的值，并将其传递给方法进行处理。
+2.支持正则表达式：@PathVariable注解还支持使用正则表达式校验路径变量的格式和范围。例如，可以使用@PathVariable("{id:[0-9]+}")表示id只能为数字。
+3.定义默认值：@PathVariable注解还允许定义一个默认变量值，以便在变量缺失时提供备选方案。
+需要注意的是，@PathVariable注解只能绑定一个URI路径变量。如果请求路径中有多个路径变量，则需要为每个变量都添加@PathVariable注解。总的来说，@PathVariable注解是Spring MVC框架中非常重要的一种注解，可以帮助开发者方便地从Restful API的URL路径中提取数据，并将其应用于程序的业务逻辑处理中。
+
+# @RequestParam注解：
+是Spring MVC框架的一个注解，用于绑定请求参数的值到方法的参数上。在使用Spring MVC处理HTTP请求时，常常需要提取请求中的参数，并将其应用于程序的业务逻辑处理中。这个时候我们可以使用@RequestParam注解。具体来说，@RequestParam注解可以实现以下几个作用：
+1.获取请求参数：通过在Controller层中设置@RequestParam("参数名")，即可从HTTP请求中获取指定名称的参数的值，并将其传递给方法进行处理。
+2.设置默认值：@RequestParam注解还允许定义一个默认参数值，以便在参数缺失时提供备选方案。
+3.限制参数：@RequestParam注解还支持使用正则表达式校验参数的格式和范围。例如，可以使用@RequestParam(value = "age", required = true, defaultValue = "18", pattern="[0-9]{1,3}")表示age必须是1-3位数字。
+需要注意的是，@RequestParam注解只能绑定一个Http请求中的参数。如果请求中有多个参数，则需要为每个参数都添加@RequestParam注解。总的来说，@RequestParam注解是Spring MVC框架中非常重要的一种注解，可以帮助开发者方便地从HTTP请求中提取数据，并将其应用于程序的业务逻辑处理中。
+
+# @RequestParam注解：
+用于绑定HTTP请求参数到方法的参数上，而@RequestBody注解则用于将HTTP请求体中的数据绑定到方法的参数上。在Spring MVC框架中，如果要处理客户端通过POST、PUT或PATCH等方式提交的JSON或XML格式的请求体，则需要使用@RequestBody注解。具体来说，@RequestBody注解可以实现以下几个作用：
+1.获取请求体：通过在Controller层中设置@RequestBody注解，即可将HTTP请求体中的数据绑定到方法参数上，并进行进一步的业务逻辑处理。
+2.支持多种类型数据：@RequestBody注解不仅仅支持JSON格式的数据，还支持XML、HTML、文本等多种格式。
+3.自动转换：Spring MVC框架会自动将请求体中的数据转换成目标对象的格式，例如将JSON格式的数据自动转换成Java对象。
+需要注意的是，只有当请求头中的"Content-Type"为"application/json"时，Spring MVC才会将请求体中的数据视为JSON格式并对其进行自动转换。如果请求头中的"Content-Type"为"text/xml"或"application/xml"，则Spring MVC会将请求体中的数据视为XML格式，并尝试将其转换为目标对象。总的来说，@RequestBody注解是Spring MVC框架中非常重要的一种注解，可以帮助开发者方便地处理以JSON或XML等格式提交的HTTP请求。
+
+# @Component注解：
+是Spring框架中一个重要的注解，用于声明一个类为组件，并将该类注册到Spring IoC容器中。具体来说，@Component注解有以下几个作用：
+1.容器管理：通过使用@Component注解，可以将任意一个Java对象交给Spring容器管理。这样，其他组件就可以通过依赖注入（@Autowired注解）的方式来获取这个对象并使用它。
+2.自动扫描：在Spring应用程序上下文启动时，会自动扫描带有@Component注解的类，并将其实例化为bean放入容器中。
+3.简化配置：使用@Component注解可以大大简化Spring配置文件中对组件的配置信息，也方便了开发和维护。
+需要注意的是，@Component注解是一个通用的注解，与具体的业务逻辑无关。除此之外，Spring框架还提供了一些特殊功能的注解，如@Service、@Repository和@Controller等注解，它们都是@Component注解的衍生注解，用于表示一类特定的组件类型。总的来说，@Component是Spring框架中非常常用的注解之一，可以帮助我们快速地创建和管理组件，并使得Spring应用程序的开发和维护更加高效和简单。
+
+# @ControllerAdvice注解：
+是Spring框架中一个很有用的注解，用于定义一个全局的异常处理器和全局数据绑定。具体来说，@ControllerAdvice注解有以下几个作用：
+1.全局的异常处理：通过在@ControllerAdvice注解中定义异常处理方法，可以捕获所有Controller中抛出的异常，并统一进行处理。这样，我们就不必在每个Controller中都编写相同的异常处理代码了。
+2.全局数据绑定：通过在@ControllerAdvice注解中使用@ModelAttribute注解，可以将一些公共数据绑定到Model对象中，在视图中渲染时可以直接使用。这样可以避免在每个Controller中都重复编写代码。
+3.全局格式化：通过在@ControllerAdvice注解中使用@InitBinder注解，可以定义全局的数据格式化规则和类型转换规则，使其适用于所有的Controller。
+需要注意的是，@ControllerAdvice注解会对整个应用程序生效，因此需要谨慎使用，同时要注意其中的异常处理方法、模型属性等注解内部配置的精细度，以避免出现不必要的副作用。总的来说，@ControllerAdvice是Spring框架中非常有用的注解，可以帮助我们实现全局的异常处理、数据绑定和数据格式化等功能，降低代码的重复性和提高开发效率。
+
+# @ResponseBody注解：
+是Spring框架中一个注解，主要用于将Controller方法返回的对象序列化成JSON或XML格式的响应体，并将其发送给客户端浏览器，通常用于构建RESTful API服务。具体来说，@ResponseBody注解有以下几个作用：
+1.将响应转换为HTTP请求的消息体：当一个Controller方法被标记为@ResponseBody后，Spring MVC会自动将该方法的返回值序列化为指定的响应格式（如JSON、XML等），并直接写入HTTP响应体中。
+2.简化开发：通过使用@ResponseBody注解，可以避免手动编写代码将Java对象序列化为JSON或XML格式，大大简化了开发工作量。
+需要注意的是，如果Controller方法没有使用@ResponseBody注解，则默认返回的是字符串类型的视图名称，Spring MVC会根据这个视图名称去查找相应的视图（JSP或Thymeleaf等），最终输出到浏览器。而如果加上@ResponseBody注解，那么返回值就会被转换成JSON或XML格式，直接写入响应体中，不再需要对应的视图。总的来说，@ResponseBody注解是Spring框架中非常常用的注解之一，它可以帮助我们快速地将Java对象转换成指定格式的响应体，方便前后端数据交互。
+
+# @ExceptionHandler注解：
+是Spring框架中的一个注解，用于在Controller类或方法中捕获指定类型的异常，并进行统一的处理。具体来说，@ExceptionHandler注解可以实现以下几个功能：
+1.统一异常处理：通过在Controller类中定义一个异常处理方法，并加上@ExceptionHandler注解，可以捕获该Controller中所有抛出指定类型（或其子类）异常的方法，并进行统一处理。
+2.全局异常处理：将@ExceptionHandler注解应用于一个全局的@ControllerAdvice类中，可以捕获整个应用程序中抛出指定类型异常的方法，并进行统一处理。
+3.精细化异常处理：可以将@ExceptionHandler注解应用于某个特定的Controller方法中，用于处理该方法中可能抛出的异常。
+需要注意的是，@ExceptionHandler注解只能捕获自己所使用的Controller内部抛出的异常，不能捕获其他Controller中的异常。当存在多个@ExceptionHandler注解时，Spring MVC会根据异常类型选择相应的异常处理方法进行处理。总的来说，@ExceptionHandler注解是Spring框架中非常有用的注解之一，可以帮助我们实现统一、集中式的异常处理，避免重复编写异常处理代码，提高开发效率和代码可读性。
+
+# @Configuration注解：
+是Spring框架中的一个注解，用于标记某个类是一个Java配置类并且将其中的某些方法返回值声明为Spring容器内的Bean。具体来说，@Configuration注解可以实现以下几个功能：
+1.声明Bean：在@Configuration注解标记的类中，可以使用@Bean注解标记某个方法，并将其返回值声明为一个Bean，使得该Bean能够被容器管理。
+2.实现依赖注入：在@Configuration注解标记的类中，可以通过@Autowired注解或者构造函数等方式对其他Bean进行依赖注入。
+3.配置属性：在@Configuration注解标记的类中，可以使用@Value注解读取配置文件中的属性值，并用于配置Bean的属性。
+4.导入其他配置类：在@Configuration注解标记的类中，可以使用@Import注解引入其他的@Configuration类。
+需要注意的是，@Configuration是一种适用于Java Config的方式，与传统的XML配置方式互不影响，即使同时存在也不冲突。另外，由于@Configuration注解标记的类本质上还是一个普通的Java类，因此可以采用各种常规的面向对象的编程技术，如继承、实现接口等。总的来说，@Configuration注解是Spring框架中非常重要的注解之一，它允许我们以Java代码的形式配置Spring应用程序，降低了我们的开发成本，提高了代码的可读性和灵活性。
+
+# @EnableSwagger2注解：
+是Springfox Swagger框架中的一个注解，用于启用Swagger API文档生成工具。具体来说，@EnableSwagger2注解可以实现以下几个功能：
+1.自动生成API接口文档：由于Springfox Swagger会扫描应用程序中的API接口信息，并基于这些信息自动生成API接口文档，因此使用@EnableSwagger2注解能够帮助我们快速、方便、高效地生成API接口文档。
+2.增强API接口文档：除了自动生成API接口文档外，Springfox Swagger还提供了一些注解和工具类，可以帮助我们对文档进行格式化、美化、增加注释等操作，使其更具可读性和易用性。
+3.提高开发效率：通过使用@EnableSwagger2注解，我们可以在开发过程中直接在浏览器上查看API接口文档，避免重复进出开发工具环境，从而提高开发效率。
+需要注意的是，@EnableSwagger2注解只是激活了Swagger功能，为了让Swagger生效还需要配置swagger-ui.html页面和相关api的json数据生成器。总的来说，@EnableSwagger2注解是Springfox Swagger框架中非常重要的注解之一，它能够帮助我们快速生成API接口文档，并提高开发效率和应用程序的可读性。
+
+# @EnableKnife4j注解：
+是一个基于SwaggerUI的增强工具，用于构建API文档和测试API接口。它可以整合Spring Boot应用程序中使用的SwaggerAPI文档，并增强其功能。具体来说@EnableKnife4j注解可以实现以下几个功能：
+1.自动生成API接口文档：通过扫描应用程序中的API接口信息，@EnableKnife4j注解能够帮助我们快速、方便、高效地生成API接口文档。
+2.增强API接口文档：除了自动生成API接口文档外，Knife4j还提供了一些注解和工具类，可以帮助我们对文档进行格式化、美化、增加注释等操作，使其更具有可读性和易用性。
+3.提供在线API测试页面：在SwaggerUI的基础上，Knife4j进一步完善了API测试页面，提供了测试数据生成等增强功能，帮助我们更加高效地进行API接口的测试和调试。
+4.支持多种分组方式：通过使用@ApiModelProperty注解以及@EnableKnife4j注解提供的分组配置功能，我们可以轻松实现对API接口进行分组展示，让文档更清晰、易读。
+需要注意的是，@EnableKnife4j注解本身并不会生成API接口文档，需要在该注解下添加@Configuration注解，将Swagger的相关配置类注入到Spring容器中，然后在配置类中配置相应的Swagger信息来生成API接口文档。
+
+# @Bean注解：
+是一个通用的注解，用于告诉Spring容器需要注册一个Bean实例。具体来说，@Bean注解可以实现以下几个功能：
+1.注册Bean实例：通过在一个配置类中添加@Bean注解，我们可以将该方法返回的对象或值注册到Spring容器中，从而将其转化为一个Bean实例。
+2.自定义Bean实例：除了将已有的对象或值注册为Bean实例外，我们还可以通过@Bean注解自定义创建一个Bean实例的方式，可以在方法中进行任意的操作，比如通过构造函数、静3.态工厂方法、实例工厂方法等方式创建Bean实例，并且可以为创建的Bean对象设置属性、处理依赖关系等。
+4.控制Bean实例作用域：Bean实例的默认作用域是Singleton，也就是说Spring容器只会创建一份Bean实例，但是我们可以使用@Scope注解来改变Bean实例的作用域，比如将其设置为Prototype，每次都创建一个新的Bean实例。
+需要注意的是，@Bean注解只能用于注解一个方法，方法的返回值就是所创建的Bean实例。另外，如果不指定名称，则Bean实例的名称默认与方法名相同（首字母小写）。总的来说，@Bean注解是Spring容器中非常重要的注解之一，它可以帮助我们向Spring容器注册Bean实例，实现Bean的自定义创建和作用域控制等功能。
+
+# 2、项目代码理解
+# 详细看源代码注释部分
